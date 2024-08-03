@@ -15,7 +15,7 @@ fn main() {
                 thread::spawn(|| handle_stream(_stream));
             }
             Err(e) => {
-                println!("error: {}", e);
+                println!("error: {e}");
             }
         }
     }

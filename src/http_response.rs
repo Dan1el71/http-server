@@ -19,7 +19,7 @@ impl fmt::Display for StatusCode {
             StatusCode::MethodNotAllowed => "405 Method Not Allowed",
         };
 
-        write!(f, "{}", status_code)
+        write!(f, "{status_code}")
     }
 }
 pub struct HttpResponse {
@@ -31,7 +31,7 @@ pub struct HttpResponse {
 impl From<StatusCode> for HttpResponse {
     fn from(status: StatusCode) -> Self {
         HttpResponse {
-            status: status,
+            status,
             headers: HashMap::new(),
             body: Vec::new(),
         }
@@ -77,8 +77,8 @@ impl HttpResponse {
     pub fn to_string(&self) -> String {
         let mut response = format!("HTTP/1.1 {}\r\n", self.status);
 
-        for (key, value) in self.headers.iter() {
-            response.push_str(&format!("{}: {}\r\n", key, value));
+        for (key, value) in &self.headers {
+            response.push_str(&format!("{key}: {value}\r\n"));
         }
 
         response.push_str("\r\n");

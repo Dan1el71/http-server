@@ -25,7 +25,7 @@ impl HttpMethod {
             "POST" => HttpMethod::POST,
             "PUT" => HttpMethod::PUT,
             "DELETE" => HttpMethod::DELETE,
-            _ => panic!("Unknown method: {}", method),
+            _ => panic!("Unknown method: {method}"),
         }
     }
 }
@@ -39,7 +39,7 @@ struct HttpRequest {
 impl HttpRequest {
     fn new(request: &str) -> Self {
         let lines: Vec<&str> = request.split("\r\n").collect();
-        let tokens: Vec<&str> = lines[0].split(" ").collect();
+        let tokens: Vec<&str> = lines[0].split(' ').collect();
 
         let mut body = Vec::new();
         let mut in_body = false;
@@ -157,9 +157,9 @@ fn handle_post_method(request: HttpRequest) -> HttpResponse {
             let file_name = &request_path[7..];
             let body = request.body;
             return match save_file(&dir, file_name, body) {
-                Ok(_) => HttpResponse::created(),
+                Ok(()) => HttpResponse::created(),
                 Err(e) => {
-                    eprintln!("Failed to create file: {}", e);
+                    eprintln!("Failed to create file: {e}");
                     HttpResponse::bad_request()
                 }
             };
@@ -187,7 +187,7 @@ pub fn handle_stream(mut stream: TcpStream) -> Result<()> {
             }
         },
         Err(e) => {
-            eprintln!("Failed to read request: {}", e);
+            eprintln!("Failed to read request: {e}");
             stream.write_all(&HttpResponse::bad_request().as_bytes())?;
         }
     }
